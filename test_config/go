@@ -1,0 +1,9 @@
+#! /bin/sh
+com='./test_config'
+
+arg1='-c config'
+arg2=''
+
+make
+$com $arg1 $arg2
+#gdb --arg $com $arg1 $arg2

@@ -1,0 +1,15 @@
+#! /bin/sh
+com='./test_dir'
+
+arg1=''
+arg2=''
+
+#pushd ..
+#make
+#popd
+
+#touch main.cpp
+
+make
+$com $arg1 $arg2
+#gdb --arg $com $arg1 $arg2

@@ -1,0 +1,116 @@
+##################### makefile ################################################
+#
+#    Author:     Wade Spires
+#    Program:    test_config
+#    Date:       2005/08/04
+#    Description:
+# 	  Makes test_config.
+#    Cleans directory of object files and executables.
+#
+###############################################################################
+
+###############################################################################
+# Variable declaration
+###############################################################################
+
+# name of program
+NAME = test_config
+
+# compilers/archivers to use
+C  = gcc
+CC = g++
+AR = /usr/bin/ar
+
+# compiler flags
+FLAGS =
+FLAGS += -g
+FLAGS += -O2
+FLAGS += -Wall
+
+# my own libraries
+TOOLS_DIR = ..
+
+# directories to search for header files
+INCLUDES = 
+INCLUDES += -I$(TOOLS_DIR)
+#INCLUDES += -I`pkg-config --cflags gsl`  # for GNU Scientific Laboratory (GSL)
+#INCLUDES += -I/home/wade/lib/boost-1.30.2
+#INCLUDES += -I/home/wade/cpp/matrix
+#INCLUDES += -I<include_directory>
+
+# directories to search for library files
+LINK_DIRS =
+LINK_DIRS += -L$(TOOLS_DIR)
+#LINK_DIRS += -L<link_directory>
+
+# libraries to link with
+LIBS =
+LIBS += -lm
+LIBS += -lws_tools
+#LIBS += -l<library>
+
+# loader flags
+LD_FLAGS =
+#LD_FLAGS +=
+
+# complete set of options to pass to linker
+LINK = $(LINK_DIRS) $(LIBS) $(LD_FLAGS)
+
+# name of file containing main()
+MAIN = main
+
+# header files in program
+HEADERS =
+HEADERS += Config_Test.hpp
+
+# source code in program
+SOURCES = 
+SOURCES += $(MAIN).cpp
+SOURCES += Config_Test.cpp
+
+# object code to generate
+OBJECTS =
+OBJECTS += Config_Test.o
+
+RM = /bin/rm -f
+
+###############################################################################
+# Rules for compiling
+###############################################################################
+
+# compile each source file into object code
+.c.o:
+		$(C)  -c $(FLAGS) $< $(INCLUDES)
+
+.cc.o:
+		$(CC) -c $(FLAGS) $< $(INCLUDES)
+
+.SUFFIXES: .cpp .o
+.cpp.o:
+		$(CC) -c $(FLAGS) $< $(INCLUDES)
+
+# link all object modules into executable
+$(NAME): $(MAIN).o $(OBJECTS)
+		$(CC) $(FLAGS) -o $(NAME) $(MAIN).o $(OBJECTS) $(LINK) $(INCLUDES)
+
+###############################################################################
+# Rules for other stuff
+###############################################################################
+
+# create static library (excludes $(MAIN).o from library)
+lib: $(OBJECTS)
+	$(AR) rcs lib$(NAME).a $(OBJECTS)
+#	ranlib lib$(NAME).a  # `ar s` is same as `ranlib`
+
+# create dependency list by examining header files that are included
+depend:
+	makedepend -- $(FLAGS) -- $(SOURCES) $(INCLUDES) -s'# DO NOT DELETE THIS LINE -- `makedepend` depends on it.'
+
+# remove object files, executables, and libraries
+clean:
+	$(RM) ${OBJECTS}
+	$(RM) ${MAIN}.o
+	$(RM) ${NAME}
+	$(RM) lib${NAME}.a
+
+# DO NOT DELETE THIS LINE -- `makedepend` depends on it.

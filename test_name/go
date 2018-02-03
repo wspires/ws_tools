@@ -1,0 +1,23 @@
+#! /bin/sh
+com='./test_name'
+
+arg1=''
+arg2=''
+
+#pushd ..
+#make
+#popd
+
+#touch main.cpp
+
+make
+
+# full command to perform
+full_com="$com $arg1 $arg2"
+echo $full_com
+
+# run command (either by itself, in a debugger, or in valgrind)
+$full_com
+#gdb --arg $full_com
+#valgrind --leak-check=full $full_com
+#valgrind --leak-check=full --show-reachable=yes -v $full_com
